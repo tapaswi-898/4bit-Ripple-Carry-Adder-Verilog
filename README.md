@@ -5,7 +5,70 @@
 This project implements a **4-bit Ripple Carry Adder (RCA)** using Verilog HDL.
 The design is built using **Full Adders**, where the carry output of each stage is passed to the next stage (ripple effect).
 
----
+## HERE IS MY VERILOG CODE.....
+## 1) module
+`timescale 1ns / 1ps
+
+module ripple_carry_adder_4bit(
+    input [3:0] A,
+    input [3:0] B,
+    input Cin,
+    output [3:0] Sum,
+    output Cout
+    );
+
+wire c1, c2, c3;
+
+// Instantiate Full Adders
+full_adder FA0 (A[0], B[0], Cin,  Sum[0], c1);
+full_adder FA1 (A[1], B[1], c1,   Sum[1], c2);
+full_adder FA2 (A[2], B[2], c2,   Sum[2], c3);
+full_adder FA3 (A[3], B[3], c3,   Sum[3], Cout);
+
+endmodule
+
+## 2) testbench
+`timescale 1ns / 1ps
+
+module ripple_carry_adder_tb;
+
+reg [3:0] A;
+reg [3:0] B;
+reg Cin;
+
+wire [3:0] Sum;
+wire Cout;
+
+// Instantiate DUT (Device Under Test)
+ripple_carry_adder_4bit uut (
+    .A(A),
+    .B(B),
+    .Cin(Cin),
+    .Sum(Sum),
+    .Cout(Cout)
+);
+
+initial begin
+    // Monitor output
+    $monitor("Time=%0t | A=%b B=%b Cin=%b | Sum=%b Cout=%b",
+              $time, A, B, Cin, Sum, Cout);
+
+    // Test cases
+    A = 4'b0000; B = 4'b0000; Cin = 0; #10;
+    A = 4'b0011; B = 4'b0101; Cin = 0; #10;
+    A = 4'b1111; B = 4'b0001; Cin = 0; #10;
+    A = 4'b1010; B = 4'b0101; Cin = 1; #10;
+    A = 4'b1111; B = 4'b1111; Cin = 1; #10;
+
+    $finish;
+end
+
+endmodule
+# # waveform
+<img width="1602" height="581" alt="image" src="https://github.com/user-attachments/assets/b784047b-92b3-4025-a30d-39713945896b" />
+
+
+
 
 ##  Features
 
